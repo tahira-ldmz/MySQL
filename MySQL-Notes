@@ -1,0 +1,196 @@
+MySQL Basics
+1. Introduction to MySQL
+MySQL is an open-source relational database management system (RDBMS).
+It stores data in tables with rows and columns and uses SQL (Structured Query Language) to manage and manipulate data.
+2. Key Terminology
+Database: A structured collection of data.
+Table: A collection of related data entries, organized in rows and columns.
+Row: A single record in a table.
+Column: A single field in a table, defining the type of data stored in each row.
+Primary Key: A unique identifier for each record in a table.
+Foreign Key: A field that links two tables, creating relationships.
+SQL Commands
+1. Data Definition Language (DDL)
+DDL commands define or alter the structure of databases and tables.
+
+1.1 CREATE – Create a database or table
+CREATE DATABASE database_name;
+CREATE TABLE table_name (
+    column1 datatype constraints,
+    column2 datatype constraints,
+    ...
+);
+Example:
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT
+);
+1.2 ALTER – Modify a table
+ALTER TABLE table_name
+ADD column_name datatype;
+ALTER TABLE table_name
+DROP COLUMN column_name;
+1.3 DROP – Delete a database or table
+DROP DATABASE database_name;
+DROP TABLE table_name;
+1.4 TRUNCATE – Remove all data from a table
+TRUNCATE TABLE table_name;
+2. Data Manipulation Language (DML)
+DML commands handle data manipulation within tables.
+
+2.1 INSERT – Insert new data
+INSERT INTO table_name (column1, column2, ...)
+VALUES (value1, value2, ...);
+Example:
+
+INSERT INTO students (student_id, name, age)
+VALUES (1, 'John Doe', 20);
+2.2 SELECT – Retrieve data
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+Example:
+
+SELECT * FROM students WHERE age > 18;
+2.3 UPDATE – Modify existing data
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+Example:
+
+UPDATE students SET age = 21 WHERE student_id = 1;
+2.4 DELETE – Remove specific records
+
+DELETE FROM table_name WHERE condition;
+Example:
+
+DELETE FROM students WHERE student_id = 1;
+3. Data Query Language (DQL)
+SELECT (Already discussed above) is used to query and retrieve data from the database.
+4. Data Control Language (DCL)
+GRANT and REVOKE commands manage user permissions.
+5. Transaction Control Language (TCL)
+COMMIT: Save the current transaction.
+ROLLBACK: Undo changes in the current transaction.
+SAVEPOINT: Set a point within a transaction to roll back to.
+AUTOCOMMIT: Automatically save changes after each statement.
+SQL Clauses
+1. WHERE – Filters records
+SELECT * FROM students WHERE age > 18;
+2. ORDER BY – Sorts results
+
+SELECT * FROM students ORDER BY name ASC;
+3. GROUP BY – Groups results based on a column
+SELECT age, COUNT(*) FROM students GROUP BY age;
+4. HAVING – Filters groups
+
+SELECT age, COUNT(*) FROM students GROUP BY age HAVING COUNT(*) > 1;
+SQL Functions
+1. Aggregate Functions
+COUNT(): Counts rows
+SUM(): Adds values
+AVG(): Calculates average
+MAX(): Finds the maximum value
+MIN(): Finds the minimum value
+2. String Functions
+UPPER(): Converts text to uppercase.
+LOWER(): Converts text to lowercase.
+CONCAT(): Concatenates strings.
+3. Date Functions
+NOW(): Returns the current date and time.
+CURDATE(): Returns the current date.
+YEAR(), MONTH(), DAY(): Extracts specific parts of a date.
+Joins
+1. Inner Join – Returns records with matching values in both tables
+
+SELECT students.name, courses.course_name
+FROM students
+INNER JOIN courses ON students.student_id = courses.student_id;
+2. Left Join – Returns all records from the left table, with matched records from the right
+SELECT students.name, courses.course_name
+FROM students
+LEFT JOIN courses ON students.student_id = courses.student_id;
+3. Right Join – Returns all records from the right table, with matched records from the left
+
+SELECT students.name, courses.course_name
+FROM students
+RIGHT JOIN courses ON students.student_id = courses.student_id;
+4. Full Join – Returns records when there is a match in either table
+
+SELECT students.name, courses.course_name
+FROM students
+FULL JOIN courses ON students.student_id = courses.student_id;
+Subqueries
+Queries within a query.
+
+SELECT name FROM students
+WHERE age = (SELECT MAX(age) FROM students);
+Indexing
+Indexes speed up data retrieval.
+CREATE INDEX index_name ON table_name (column_name);
+Constraints
+1. Primary Key
+Uniquely identifies each record.
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+2. Foreign Key
+Links two tables together.
+
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id INT,
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+3. Unique – Ensures unique values for a column.
+CREATE TABLE students (
+    student_id INT UNIQUE,
+    email VARCHAR(100) UNIQUE
+);
+4. NOT NULL – Ensures that a column cannot have a NULL value.
+
+CREATE TABLE students (
+    student_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL
+);
+Example: Complete Workflow
+Step 1: Create Database and Tables
+
+CREATE DATABASE school;
+USE school;
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT
+);
+
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100)
+);
+
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id INT,
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+Step 2: Insert Data
+INSERT INTO students (student_id, name, age) VALUES (1, 'Alice', 20);
+INSERT INTO courses (course_id, course_name) VALUES (101, 'Mathematics');
+INSERT INTO enrollments (student_id, course_id) VALUES (1, 101);
+Step 3: Query Data with JOIN
+SELECT students.name, courses.course_name
+FROM students
+JOIN enrollments ON students.student_id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.course_id;
+
+
+
+
+
+
